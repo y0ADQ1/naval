@@ -35,4 +35,18 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+use App\Http\Controllers\GameController;
+use App\Http\Controllers\MoveController;
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/games', [GameController::class, 'index'])->name('games.index');
+    Route::post('/games', [GameController::class, 'create'])->name('games.create');
+    Route::post('/games/{game}/join', [GameController::class, 'join'])->name('games.join');
+});
+
+Route::middleware(['auth'])->group(function () {
+    Route::post('/games/{game}/move', [MoveController::class, 'store'])->name('moves.store');
+    Route::get('/games/{game}/poll', [MoveController::class, 'poll'])->name('moves.poll');
+});
+
 require __DIR__.'/auth.php';

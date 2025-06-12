@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Move extends Model
 {
 
+    public $timestamps = false;
     protected $fillable = ['game_id', 'player_id', 'x', 'y', 'result'];
 
     public function game()

@@ -2,27 +2,34 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Models\Game;
 use App\Models\Board;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Auth;
 class GameController extends Controller
 {
     public function index()
     {
-        $games = Game::where('status', 'waiting')->get();    
-        return inertia('Games/Index', ['games' => $games,]);
+        $game = Game::where('status', 'waiting')->get();   
+        return response()->json($game); 
+        return inertia('Game/Index', ['game' => $game,]);
     }
 
-    public function create()
+    public function create(Request $request)
     {
         $game = Game::create([
-            'player1_id' => Auth::id(),
+            'player_1' => Auth::id(),
             'status' => 'waiting',
         ]);
 
         $this->generateBoard($game, Auth::user());
-        return redirect()->route('games.show', $game->id);
+
+         return response()->json([
+        'game' => $game,
+        'message' => 'Game created successfully',
+    ]);
+        //return redirect()->route('games.show', $game->id);
     }
 
     public function join(Request $request, Game $game)
@@ -32,18 +39,10 @@ class GameController extends Controller
             return redirect()->back()->with('error', 'El juego ya ha comenzado o ha finalizado.');
         }
 
-        $game->update(['player2_id' => Auth::id(), 'status' => 'active']);
+        $game->update(['player_2' => Auth::id(), 'status' => 'active']);
         $this->generateBoard($game, Auth::user());
 
-        return redirect()->route('games.show', $game->id);
-    }
-
-    public function show(Game $game)
-    {
-        $this->authorize('view', $game);
-         return inertia('Games/Show', [
-            'game' => $game->load('boards', 'moves'),
-        ]);
+        return redirect()->route('games.join', $game->id);
     }
 
     private function generateBoard(Game $game, User $user)
@@ -60,7 +59,7 @@ class GameController extends Controller
             }
         }
 
-        Board::create(['game_id' => $game->id,'user_id' => $user->id,'grid' => $grid,
+        Board::create(['game_id' => $game->id,'player_id' => $user->id,'grid' => $grid,
         ]);
     }
 }

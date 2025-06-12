@@ -7,7 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Board extends Model
 {
-protected $fillable = ['game_id', 'user_id', 'grid'];
+    public $timestamps = false;
+protected $fillable = ['game_id', 'player_id', 'grid'];
 
     protected $casts = ['grid' => 'array',];
 
@@ -16,7 +17,8 @@ protected $fillable = ['game_id', 'user_id', 'grid'];
         return $this->belongsTo(Game::class);
         }
 
-    public function user()
+    public function player()
     {
-        return $this->belongsTo(User::class);
-    }}
+        return $this->belongsTo(User::class, 'player_id');
+    }
+}
