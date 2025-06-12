@@ -13,8 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('moves', function (Blueprint $table) {
-            $table->foreignId('game_id')->constrained('games')->onDelete('cascade');
+        Schema::create('moves', function (Blueprint $table) {
+            $table->foreignId('game_id')->constrained('game')->onDelete('cascade');
             $table->foreignId('player_id')->constrained('users')->onDelete('cascade');
             $table->integer('x');
             $table->integer('y');

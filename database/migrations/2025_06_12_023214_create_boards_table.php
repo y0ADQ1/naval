@@ -13,8 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('boards', function (Blueprint $table) {
-            $table->foreignId('game_id')->constrained('games')->onDelete('cascade');
+        Schema::create('boards', function (Blueprint $table) {
+            $table->foreignId('game_id')->constrained('game')->onDelete('cascade');
             $table->foreignId('player_id')->constrained('users')->onDelete('cascade');
             $table->json('grid')->nullable();
         });

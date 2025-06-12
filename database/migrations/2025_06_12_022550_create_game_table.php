@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('game', function (Blueprint $table) {
+        Schema::create('game', function (Blueprint $table) {
             $table->id();
             $table->foreignId('player_1')->constrained('users')->onDelete('cascade');
             $table->foreignId('player_2')->nullable()->constrained('users')->onDelete('cascade');
