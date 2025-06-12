@@ -1,90 +1,66 @@
-<script setup>
-import Checkbox from '@/Components/Checkbox.vue';
-import GuestLayout from '@/Layouts/GuestLayout.vue';
-import InputError from '@/Components/InputError.vue';
-import InputLabel from '@/Components/InputLabel.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
-import TextInput from '@/Components/TextInput.vue';
-import { Head, Link, useForm } from '@inertiajs/vue3';
+<template>
+  <div class="min-h-screen bg-blue-900 text-white flex items-center justify-center">
+    <div class="max-w-md w-full p-6 bg-gray-800 rounded-lg shadow-md">
+      <h1 class="text-3xl font-bold mb-6 text-center">Iniciar Sesión</h1>
+      <form @submit.prevent="submit">
+        <div class="mb-4">
+          <label class="block text-gray-200 mb-2" for="email">Correo Electrónico</label>
+          <input
+            v-model="form.email"
+            type="email"
+            id="email"
+            class="w-full bg-gray-700 text-white border border-gray-600 rounded p-2 focus:outline-none focus:ring-2 focus:ring-emerald-600"
+            required
+          />
+        </div>
+        <div class="mb-4">
+          <label class="block text-gray-200 mb-2" for="password">Contraseña</label>
+          <input
+            v-model="form.password"
+            type="password"
+            id="password"
+            class="w-full bg-gray-700 text-white border border-gray-600 rounded p-2 focus:outline-none focus:ring-2 focus:ring-emerald-600"
+            required
+          />
+        </div>
+        <div class="flex items-center justify-between mb-4">
+          <label class="flex items-center text-gray-200">
+            <input v-model="form.remember" type="checkbox" class="mr-2" />
+            Recordarme
+          </label>
+          <a href="/forgot-password" class="text-emerald-400 hover:text-emerald-500">¿Olvidaste tu contraseña?</a>
+        </div>
+        <button
+          type="submit"
+          class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2 px-4 rounded shadow-md transition"
+        >
+          Iniciar Sesión
+        </button>
+      </form>
+      <p class="mt-4 text-center">
+        <a href="/register" class="text-emerald-400 hover:text-emerald-500">¿No tienes cuenta? Regístrate</a>
+      </p>
+    </div>
+  </div>
+</template>
 
-defineProps({
-    canResetPassword: Boolean,
-    status: String,
-});
+<script>
+import { Inertia } from '@inertiajs/inertia';
 
-const form = useForm({
-    email: '',
-    password: '',
-    remember: false,
-});
-
-const submit = () => {
-    form.post(route('login'), {
-        onFinish: () => form.reset('password'),
-    });
+export default {
+  data() {
+    return {
+      form: {
+        email: '',
+        password: '',
+        remember: false,
+      },
+    };
+  },
+  methods: {
+    submit() {
+      Inertia.post('/login', this.form);
+    },
+  },
 };
 </script>
-
-<template>
-    <GuestLayout>
-        <Head title="Log in" />
-
-        <div v-if="status" class="mb-4 font-medium text-sm text-green-600">
-            {{ status }}
-        </div>
-
-        <form @submit.prevent="submit">
-            <div>
-                <InputLabel for="email" value="Email" />
-
-                <TextInput
-                    id="email"
-                    type="email"
-                    class="mt-1 block w-full"
-                    v-model="form.email"
-                    required
-                    autofocus
-                    autocomplete="username"
-                />
-
-                <InputError class="mt-2" :message="form.errors.email" />
-            </div>
-
-            <div class="mt-4">
-                <InputLabel for="password" value="Password" />
-
-                <TextInput
-                    id="password"
-                    type="password"
-                    class="mt-1 block w-full"
-                    v-model="form.password"
-                    required
-                    autocomplete="current-password"
-                />
-
-                <InputError class="mt-2" :message="form.errors.password" />
-            </div>
-
-            <div class="block mt-4">
-                <label class="flex items-center">
-                    <Checkbox name="remember" v-model:checked="form.remember" />
-                    <span class="ml-2 text-sm text-gray-600">Remember me</span>
-                </label>
-            </div>
-
-            <div class="flex items-center justify-end mt-4">
-                <Link
-                    v-if="canResetPassword"
-                    :href="route('password.request')"
-                    class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                >
-                    Forgot your password?
-                </Link>
-
-                <PrimaryButton class="ml-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                    Log in
-                </PrimaryButton>
-            </div>
-        </form>
-    </GuestLayout>
-</template>
