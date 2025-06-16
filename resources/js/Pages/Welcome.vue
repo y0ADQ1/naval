@@ -42,7 +42,7 @@ export default {
   methods: {
     playNow() {
       if (this.auth.user) {
-        Inertia.get('/games/options');
+        Inertia.get('/games');
       } else {
         Inertia.get('/login');
       }

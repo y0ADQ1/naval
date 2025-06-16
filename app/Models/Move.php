@@ -7,9 +7,15 @@ use Illuminate\Database\Eloquent\Model;
 
 class Move extends Model
 {
+    use HasFactory;
 
-    public $timestamps = false;
-    protected $fillable = ['game_id', 'player_id', 'x', 'y', 'result'];
+    protected $fillable = [
+        'game_id',
+        'player_id',   // ✅
+        'x',
+        'y',
+        'result',
+    ];
 
     public function game()
     {
@@ -18,6 +24,6 @@ class Move extends Model
 
     public function player()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'player_id');
     }
 }

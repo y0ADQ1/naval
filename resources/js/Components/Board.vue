@@ -1,18 +1,21 @@
 <template>
-    <div class="grid grid-cols-8  gap-1 bg-gray-800 p-2 rounded shadow-md">
-        <div v-for="(row, rowIndex) in board" :key="rowIndex" class="flex flex-col">
-            <div v-for="(cell, colIndex) in row" :key="colIndex" :class="{'bg-blue-500': cell === 1 && isOwnBoard,
-                'bg-red-500': cell === 'hit',
-                'bg-gray-300': cell === 'miss',
-                'bg-gray-600': !isOwnBoard && cell !== 'hit' && cell !== 'miss',
-            }" 
-            class="w-10 h-10 border border-gray-600" @click="!isOwnBoard && cell !== 'hit' && cell !== 'miss' ? $emit('move', { x: rowIndex, y: colIndex }) : null">
-
+    <div class="grid grid-cols-8 gap-1">
+        <div
+            v-for="(row, y) in board"
+            :key="y"
+            class="flex flex-col"
+        >
+            <div
+                v-for="(cell, x) in row"
+                :key="x"
+                class="w-10 h-10 flex items-center justify-center border border-gray-600"
+                :class="getCellClass(cell)"
+                @click="!isOwnBoard && !cell ? $emit('move', { x, y }) : null"
+            >
+                {{ cell === 'hit' ? 'X' : cell === 'miss' ? 'O' : '' }}
             </div>
-
         </div>
     </div>
-
 </template>
 
 <script>
@@ -21,6 +24,18 @@ export default {
         board: Array,
         isOwnBoard: Boolean,
     },
-    emits: ['move'],
+
+    methods: {
+        getCellClass(cell) {
+            if (this.isOwnBoard) {
+                return cell === 1 ? 'bg-blue-500 cursor-default' : 'bg-gray-700 cursor-default';
+            }
+            return {
+                'bg-red-500': cell === 'hit',
+                'bg-gray-300': cell === 'miss',
+                'bg-gray-700 cursor-pointer hover:bg-gray-600': !cell,
+            };
+        },
+    },
 };
 </script>

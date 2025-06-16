@@ -9,7 +9,7 @@ class Game extends Model
 {
     public $timestamps = false;
     protected $table = 'game';
-    protected $fillable = ['player_1', 'player_2', 'status', 'winner_id'];
+    protected $fillable = ['player_1', 'player_2', 'status', 'winner'];
 
     public function player1()
     {

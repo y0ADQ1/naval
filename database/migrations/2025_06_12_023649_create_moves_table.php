@@ -6,33 +6,28 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
-    public function up()
+    public function up(): void
     {
         Schema::create('moves', function (Blueprint $table) {
-            $table->foreignId('game_id')->constrained('game')->onDelete('cascade');
-            $table->foreignId('player_id')->constrained('users')->onDelete('cascade');
-            $table->integer('x');
-            $table->integer('y');
-            $table->string('result');
+            $table->id();                                                  // PK autoincremental
+            $table->foreignId('game_id')
+                  ->constrained('game')                                   // ← nombre correcto
+                  ->onDelete('cascade');
+
+            $table->foreignId('player_id')
+                  ->constrained('users')
+                  ->onDelete('cascade');
+
+            $table->unsignedTinyInteger('x');                              // 0‑7
+            $table->unsignedTinyInteger('y');                              // 0‑7
+            $table->string('result', 4);                                   // 'hit' | 'miss'
+
+            $table->timestamps();                                          // created_at / updated_at
         });
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
+    public function down(): void
     {
-        Schema::table('moves', function (Blueprint $table) {
-            $table->dropForeign(['game_id']);
-            $table->dropForeign(['player_id']);
-            $table->dropColumn(['game_id', 'player_id', 'x', 'y', 'result']);
-        });
+        Schema::dropIfExists('moves');
     }
 };
