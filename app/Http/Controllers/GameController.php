@@ -79,7 +79,6 @@ class GameController extends Controller
         ]);
     }
 
-    // app/Http/Controllers/GameController.php
     public function stats()
     {
         $games = Game::where('status', 'finished')

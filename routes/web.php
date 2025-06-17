@@ -35,6 +35,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/games/stats', [GameController::class, 'stats'])->name('games.stats');
     Route::post('/games/{game}/move', [MoveController::class, 'store'])->name('moves.store');
     Route::get('/games/{game}/poll', [MoveController::class, 'poll'])->name('moves.poll');
+    Route::post('/games/{game}/force-turn-change', [MoveController::class, 'forceTurnChange'])->name('games.force-turn-change')->middleware('auth');
 });
 
 require __DIR__.'/auth.php';

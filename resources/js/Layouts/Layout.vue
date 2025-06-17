@@ -1,9 +1,14 @@
-<meta name="csrf-token" content="{{ csrf_token() }}"></meta>
+<!-- resources/js/Layouts/Layout.vue -->
 <template>
     <div class="min-h-screen bg-blue-900">
         <nav class="bg-gray-800 p-4 shadow-md">
             <div class="max-w-7xl mx-auto flex justify-between items-center">
-                <h1 class="text-2xl font-bold text-white">Batalla Naval</h1>
+                <button
+                    @click="goToGames"
+                    class="text-2xl font-bold text-white hover:text-gray-300 transition duration-200 focus:outline-none"
+                >
+                    Batalla Naval
+                </button>
                 <div class="space-x-4">
                     <button @click="goToStats" class="text-gray-200 hover:text-white transition duration-200">
                         Estadísticas
@@ -25,6 +30,9 @@ import { Inertia } from '@inertiajs/inertia';
 
 export default {
     methods: {
+        goToGames() {
+            Inertia.get('/games');
+        },
         goToStats() {
             Inertia.get('/games/stats');
         },

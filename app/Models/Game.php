@@ -7,9 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Game extends Model
 {
-    public $timestamps = false;
+    use HasFactory;
+    // Remove or comment out: public $timestamps = false;
     protected $table = 'game';
-    protected $fillable = ['player_1', 'player_2', 'status', 'winner'];
+    protected $fillable = ['player_1', 'player_2', 'status', 'winner', 'status_reason'];
 
     public function player1()
     {
